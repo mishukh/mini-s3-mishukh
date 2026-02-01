@@ -1,0 +1,13 @@
+
+# Dependencies
+node_modules/
+
+# Environment Variables (Sensitive)
+.env
+
+# Storage Nodes (Local Data - Do not upload)
+nodes/
+
+# System Files
+.DS_Store
+Thumbs.db
