@@ -31,7 +31,7 @@ graph TD
     Client[Client Request] -->|Multipart Stream| Server[API Gateway / Express]
     Server -->|Pipe| Busboy[Busboy Parser]
     
-    subgraph Stream Processing Pipeline
+    subgraph SP["Stream Processing Pipeline"]
         Busboy -->|File Stream| Chunker[ChunkerStream]
         Chunker -->|1MB Buffers| Hasher[SHA-256 Hasher]
         Hasher -->|Hash + Data| Dedupe{Exists in DB?}
@@ -40,7 +40,7 @@ graph TD
     Dedupe -->|Yes| Link[Link Metadata Only]
     Dedupe -->|No| Distribute[Distribution Logic]
     
-    subgraph Storage Layer (Local Cluster Simulation)
+    subgraph SL["Storage Layer (Local Cluster Simulation)"]
         Distribute -->|Round Robin| Node1[Storage Node 1]
         Distribute -->|Round Robin| Node2[Storage Node 2]
         Distribute -->|Round Robin| Node3[Storage Node 3]
@@ -48,7 +48,6 @@ graph TD
     
     Link --> Mongo[(MongoDB Metadata)]
     Distribute --> Mongo
-```
 
 ---
 
