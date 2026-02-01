@@ -28,26 +28,27 @@ The following diagram illustrates the data flow during a file upload, highlighti
 
 ```mermaid
 graph TD
-    Client[Client Request] -->|Multipart Stream| Server[API Gateway / Express]
-    Server -->|Pipe| Busboy[Busboy Parser]
+  Client[Client Request] -->|Multipart Stream| Server[API Gateway / Express]
+  Server -->|Pipe| Busboy[Busboy Parser]
 
-    subgraph SP["Stream Processing Pipeline"]
-        Busboy -->|File Stream| Chunker[ChunkerStream]
-        Chunker -->|1MB Buffers| Hasher[SHA-256 Hasher]
-        Hasher -->|Hash + Data| Dedupe{Exists in DB?}
-    end
+  subgraph Stream_Processing_Pipeline
+    Busboy -->|File Stream| Chunker[ChunkerStream]
+    Chunker -->|1MB Buffers| Hasher[SHA-256 Hasher]
+    Hasher -->|Hash + Data| Dedupe{Exists in DB?}
+  end
 
-    Dedupe -->|Yes| Link[Link Metadata Only]
-    Dedupe -->|No| Distribute[Distribution Logic]
+  Dedupe -->|Yes| Link[Link Metadata Only]
+  Dedupe -->|No| Distribute[Distribution Logic]
 
-    subgraph SL["Storage Layer (Local Cluster Simulation)"]
-        Distribute -->|Round Robin| Node1[Storage Node 1]
-        Distribute -->|Round Robin| Node2[Storage Node 2]
-        Distribute -->|Round Robin| Node3[Storage Node 3]
-    end
+  subgraph Storage_Layer
+    Distribute -->|Round Robin| Node1[Storage Node 1]
+    Distribute -->|Round Robin| Node2[Storage Node 2]
+    Distribute -->|Round Robin| Node3[Storage Node 3]
+  end
 
-    Link --> Mongo[(MongoDB Metadata)]
-    Distribute --> Mongo
+  Link --> Mongo[(MongoDB Metadata)]
+  Distribute --> Mongo
+```
 
 ---
 
