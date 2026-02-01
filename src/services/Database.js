@@ -5,7 +5,7 @@ require('dotenv').config();
 let redisClient;
 
 try {
-  redisClient = new Redis(process.env.REDIS_URI || 'redis://localhost:6379', {
+  redisClient = new Redis(process.env.REDIS_URI , {
     retryStrategy: () => null,
     maxRetriesPerRequest: 1
   });
@@ -30,7 +30,7 @@ try {
 
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/mini-s3';
+    const mongoURI = process.env.MONGO_URI ;
     await mongoose.connect(mongoURI);
     console.log(`Connected to MongoDB at ${mongoURI}`);
 
